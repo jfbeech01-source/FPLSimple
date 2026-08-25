@@ -329,17 +329,31 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
+        /* Mobile: player name gets its own row, then ALL 8 requested
+           statistics are displayed in a compact 4 x 2 grid. */
         .player {
-            grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(47px, .65fr));
-            gap: 7px;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px 6px;
             padding: 10px 8px;
         }
 
-        .player .stat:nth-child(n+6) {
-            display: none;
+        .identity {
+            grid-column: 1 / -1;
+            padding-bottom: 3px;
+            border-bottom: 1px solid rgba(29, 51, 40, .7);
         }
 
-        .stat-label { display: block; }
+        .stat {
+            min-width: 0;
+        }
+
+        .stat-label {
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 12px;
+        }
     }
 
     @media (max-width: 470px) {
@@ -358,15 +372,20 @@
         }
 
         .player {
-            grid-template-columns: minmax(0, 1.7fr) repeat(3, minmax(48px, .65fr));
-        }
-
-        .player .stat:nth-child(n+5) {
-            display: none;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px 4px;
         }
 
         .name { font-size: 12px; }
         .club { font-size: 8px; }
+
+        .stat-label {
+            font-size: 7px;
+        }
+
+        .stat-value {
+            font-size: 11px;
+        }
     }
 </style>
 </head>
@@ -507,7 +526,7 @@ async function loadData() {
 
         els.feedStatus.textContent = "ONLINE";
         els.feedStatus.style.color = "var(--green)";
-        els.updated.textContent = new Date(data._fetched_at || Date.now()).toLocaleTimeString([], {
+        els.updated.textContent = new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit"
         });
