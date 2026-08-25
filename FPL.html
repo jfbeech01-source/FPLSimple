@@ -302,7 +302,9 @@
         margin-right: 6px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
 
     footer {
         color: #40564a;
@@ -315,7 +317,11 @@
     @media (max-width: 760px) {
         .wrap { padding: 8px; }
 
-        header, .controls, .sort-panel { padding: 10px; }
+        header,
+        .controls,
+        .sort-panel {
+            padding: 10px;
+        }
 
         .filter-buttons {
             grid-template-columns: repeat(3, 1fr);
@@ -329,35 +335,64 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
-        /* Mobile: player name gets its own row, then ALL 8 requested
-           statistics are displayed in a compact 4 x 2 grid. */
+        /* VERSION 4 MOBILE LAYOUT
+           Every requested field is deliberately visible. */
+
         .player {
+            display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 8px 6px;
-            padding: 10px 8px;
+            gap: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .identity {
             grid-column: 1 / -1;
-            padding-bottom: 3px;
-            border-bottom: 1px solid rgba(29, 51, 40, .7);
+            padding: 11px 10px 9px;
+            border-bottom: 1px solid var(--line);
         }
 
         .stat {
             min-width: 0;
+            padding: 9px 4px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .stat:nth-last-child(-n+4) {
+            border-bottom: 0;
+        }
+
+        .stat:nth-child(5),
+        .stat:nth-child(9) {
+            border-right: 0;
         }
 
         .stat-label {
             display: block;
+            color: var(--muted);
+            font-size: 8px;
+            margin-bottom: 4px;
+            letter-spacing: .7px;
         }
 
         .stat-value {
             font-size: 12px;
         }
+
+        .name {
+            font-size: 13px;
+        }
+
+        .club {
+            font-size: 9px;
+        }
     }
 
     @media (max-width: 470px) {
-        h1 { letter-spacing: 2px; }
+        h1 {
+            letter-spacing: 2px;
+        }
 
         .filter-buttons {
             grid-template-columns: repeat(2, 1fr);
@@ -373,11 +408,15 @@
 
         .player {
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px 4px;
         }
 
-        .name { font-size: 12px; }
-        .club { font-size: 8px; }
+        .name {
+            font-size: 12px;
+        }
+
+        .club {
+            font-size: 8px;
+        }
 
         .stat-label {
             font-size: 7px;
@@ -389,59 +428,154 @@
     }
 </style>
 </head>
+
 <body>
 <div class="scanlines"></div>
 
 <main class="wrap">
+
     <header>
-        <div class="eyebrow">CLASSIFIED // FANTASY PREMIER LEAGUE</div>
+
+        <div class="eyebrow">
+            CLASSIFIED // FANTASY PREMIER LEAGUE
+        </div>
+
+        <div style="
+            display:inline-block;
+            margin:0 0 9px;
+            padding:5px 9px;
+            border:1px solid #55ff9a;
+            color:#55ff9a;
+            background:#07100c;
+            font-size:10px;
+            letter-spacing:2px;
+            font-weight:bold;
+        ">
+            VERSION 4
+        </div>
+
         <h1>FPL RECON INTEL</h1>
+
         <div class="subtitle">
             PLAYER INTELLIGENCE DATABASE // LIVE FPL FEED // SORT, FILTER &amp; IDENTIFY TARGETS
         </div>
+
         <div class="status">
-            <div class="status-chip">FEED: <strong id="feedStatus">CONNECTING</strong></div>
-            <div class="status-chip">LAST UPDATE: <strong id="updated">--</strong></div>
-            <div class="status-chip">TARGETS: <strong id="count">--</strong></div>
+
+            <div class="status-chip">
+                FEED: <strong id="feedStatus">CONNECTING</strong>
+            </div>
+
+            <div class="status-chip">
+                LAST UPDATE: <strong id="updated">--</strong>
+            </div>
+
+            <div class="status-chip">
+                TARGETS: <strong id="count">--</strong>
+            </div>
+
         </div>
+
     </header>
 
     <section class="controls">
-        <div class="control-label">SELECT UNIT TYPE</div>
-        <div class="filter-buttons">
-            <button class="filter active" data-position="all">ALL PLAYERS</button>
-            <button class="filter" data-position="1">GK</button>
-            <button class="filter" data-position="2">DEFENDERS</button>
-            <button class="filter" data-position="3">MIDFIELDERS</button>
-            <button class="filter" data-position="4">ATTACKERS</button>
+
+        <div class="control-label">
+            SELECT UNIT TYPE
         </div>
+
+        <div class="filter-buttons">
+
+            <button class="filter active" data-position="all">
+                ALL PLAYERS
+            </button>
+
+            <button class="filter" data-position="1">
+                GK
+            </button>
+
+            <button class="filter" data-position="2">
+                DEFENDERS
+            </button>
+
+            <button class="filter" data-position="3">
+                MIDFIELDERS
+            </button>
+
+            <button class="filter" data-position="4">
+                ATTACKERS
+            </button>
+
+        </div>
+
     </section>
 
     <section class="sort-panel">
-        <div class="control-label">SORT INTELLIGENCE BY</div>
-        <div class="sort-buttons">
-            <button class="sort active" data-sort="web_name">PLAYER <span class="arrow">▲</span></button>
-            <button class="sort" data-sort="team_name">CLUB <span class="arrow"></span></button>
-            <button class="sort" data-sort="position_name">POSITION <span class="arrow"></span></button>
-            <button class="sort" data-sort="price">VALUE <span class="arrow"></span></button>
-            <button class="sort" data-sort="total_points">POINTS <span class="arrow"></span></button>
-            <button class="sort" data-sort="goals_scored">GOALS <span class="arrow"></span></button>
-            <button class="sort" data-sort="clean_sheets">CLEAN SHEETS <span class="arrow"></span></button>
-            <button class="sort" data-sort="form_num">FORM <span class="arrow"></span></button>
-            <button class="sort" data-sort="ict_index_num">ICT <span class="arrow"></span></button>
+
+        <div class="control-label">
+            SORT INTELLIGENCE BY
         </div>
+
+        <div class="sort-buttons">
+
+            <button class="sort active" data-sort="web_name">
+                PLAYER <span class="arrow">▲</span>
+            </button>
+
+            <button class="sort" data-sort="team_name">
+                CLUB <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="position_name">
+                POSITION <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="price">
+                VALUE <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="total_points">
+                POINTS <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="goals_scored">
+                GOALS <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="clean_sheets">
+                CLEAN SHEETS <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="form_num">
+                FORM <span class="arrow"></span>
+            </button>
+
+            <button class="sort" data-sort="ict_index_num">
+                ICT <span class="arrow"></span>
+            </button>
+
+        </div>
+
     </section>
 
-    <div class="summary" id="summary">AWAITING INTELLIGENCE FEED...</div>
+    <div class="summary" id="summary">
+        AWAITING INTELLIGENCE FEED...
+    </div>
 
     <section id="players">
-        <div class="loading"><span class="spinner"></span>ESTABLISHING SECURE FPL DATA LINK...</div>
+
+        <div class="loading">
+            <span class="spinner"></span>
+            ESTABLISHING SECURE FPL DATA LINK...
+        </div>
+
     </section>
 
     <footer>
         DATA SOURCE: OFFICIAL FANTASY PREMIER LEAGUE FEED<br>
         This page reads the current FPL public data when opened or refreshed.
     </footer>
+
 </main>
 
 <script>
@@ -485,7 +619,9 @@ function number(value) {
 }
 
 function preparePlayer(p) {
+
     const team = teams[p.team] || {};
+
     const price = number(p.now_cost) / 10;
     const form = number(p.form);
     const ict = number(p.ict_index);
@@ -502,22 +638,27 @@ function preparePlayer(p) {
 }
 
 async function loadData() {
+
     els.feedStatus.textContent = "CONNECTING";
     els.feedStatus.style.color = "var(--amber)";
 
     try {
+
         const response = await fetch(API_URL, {
             method: "GET",
             cache: "no-store"
         });
 
         if (!response.ok) {
-            throw new Error("FPL feed returned HTTP " + response.status);
+            throw new Error(
+                "FPL feed returned HTTP " + response.status
+            );
         }
 
         const data = await response.json();
 
         teams = {};
+
         data.teams.forEach(team => {
             teams[team.id] = team;
         });
@@ -526,149 +667,49 @@ async function loadData() {
 
         els.feedStatus.textContent = "ONLINE";
         els.feedStatus.style.color = "var(--green)";
-        els.updated.textContent = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit"
-        });
+
+        els.updated.textContent =
+            new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
 
         render();
+
     } catch (error) {
+
         console.error(error);
+
         els.feedStatus.textContent = "OFFLINE";
         els.feedStatus.style.color = "var(--red)";
+
         els.players.innerHTML = `
             <div class="error">
-                <strong>DATA LINK FAILED</strong><br><br>
-                The FPL data feed could not be reached.<br>
-                Make sure the device is online and try refreshing the page.
+
+                <strong>DATA LINK FAILED</strong>
+
                 <br><br>
-                If you opened this file directly from local storage, your browser may be
-                blocking requests from local files. Running it through a simple local web
-                server will fix that.
-            </div>`;
-        els.summary.textContent = "NO INTELLIGENCE AVAILABLE";
+
+                The FPL data feed could not be reached.
+
+                <br>
+
+                Make sure the device is online and try
+                refreshing the page.
+
+                <br><br>
+
+                If you opened this file directly from local
+                storage, your browser may be blocking requests
+                from local files. Running it through a simple
+                local web server will fix that.
+
+            </div>
+        `;
+
+        els.summary.textContent =
+            "NO INTELLIGENCE AVAILABLE";
     }
 }
 
-function getFilteredPlayers() {
-    let players = currentPosition === "all"
-        ? [...allPlayers]
-        : allPlayers.filter(p => String(p.element_type) === currentPosition);
-
-    players.sort((a, b) => {
-        const av = a[sortKey];
-        const bv = b[sortKey];
-
-        if (typeof av === "number" && typeof bv === "number") {
-            return (av - bv) * sortDirection;
-        }
-
-        return String(av ?? "").localeCompare(String(bv ?? ""), undefined, {
-            numeric: true,
-            sensitivity: "base"
-        }) * sortDirection;
-    });
-
-    return players;
-}
-
-function render() {
-    const players = getFilteredPlayers();
-
-    els.count.textContent = players.length;
-    els.summary.textContent =
-        `${players.length} TARGET${players.length === 1 ? "" : "S"} // ` +
-        `${currentPosition === "all" ? "ALL UNITS" : positionNames[currentPosition]} // ` +
-        `SORT: ${sortKey.replace("_num", "").replaceAll("_", " ").toUpperCase()}`;
-
-    if (!players.length) {
-        els.players.innerHTML = `<div class="empty">NO TARGETS FOUND.</div>`;
-        return;
-    }
-
-    els.players.innerHTML = players.map(p => {
-        const formClass = p.form_num >= 5 ? "good" : p.form_num >= 3 ? "hot" : "";
-        const ictClass = p.ict_index_num >= 100 ? "good" : p.ict_index_num >= 50 ? "hot" : "";
-
-        return `
-            <article class="player">
-                <div class="identity">
-                    <div class="name">${esc(p.web_name)}</div>
-                    <div class="club">${esc(p.team_name)} // ${esc(p.team_short)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">POS</div>
-                    <div class="stat-value position">${esc(p.position_name)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">VALUE</div>
-                    <div class="stat-value">£${p.price.toFixed(1)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">PTS</div>
-                    <div class="stat-value">${number(p.total_points)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">GOALS</div>
-                    <div class="stat-value">${number(p.goals_scored)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">CS</div>
-                    <div class="stat-value">${number(p.clean_sheets)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">FORM</div>
-                    <div class="stat-value ${formClass}">${p.form_num.toFixed(1)}</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-label">ICT</div>
-                    <div class="stat-value ${ictClass}">${p.ict_index_num.toFixed(1)}</div>
-                </div>
-            </article>`;
-    }).join("");
-}
-
-document.querySelectorAll(".filter").forEach(button => {
-    button.addEventListener("click", () => {
-        document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
-        button.classList.add("active");
-        currentPosition = button.dataset.position;
-        render();
-    });
-});
-
-document.querySelectorAll(".sort").forEach(button => {
-    button.addEventListener("click", () => {
-        const newKey = button.dataset.sort;
-
-        if (sortKey === newKey) {
-            sortDirection *= -1;
-        } else {
-            sortKey = newKey;
-            sortDirection = 1;
-        }
-
-        document.querySelectorAll(".sort").forEach(b => {
-            b.classList.remove("active");
-            b.querySelector(".arrow").textContent = "";
-        });
-
-        button.classList.add("active");
-        button.querySelector(".arrow").textContent =
-            sortDirection === 1 ? "▲" : "▼";
-
-        render();
-    });
-});
-
-loadData();
-</script>
-</body>
-</html>
+function getFilteredPlayers
