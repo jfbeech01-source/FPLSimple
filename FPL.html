@@ -428,7 +428,7 @@
 <script>
 "use strict";
 
-const API_URL = "https://fantasy.premierleague.com/api/bootstrap-static/";
+const API_URL = "./data.json";
 
 let allPlayers = [];
 let teams = {};
@@ -507,7 +507,7 @@ async function loadData() {
 
         els.feedStatus.textContent = "ONLINE";
         els.feedStatus.style.color = "var(--green)";
-        els.updated.textContent = new Date().toLocaleTimeString([], {
+        els.updated.textContent = new Date(data._fetched_at || Date.now()).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit"
         });
