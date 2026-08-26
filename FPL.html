@@ -3,585 +3,591 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#07100d">
+<meta name="theme-color" content="#050907">
 <title>FPL // RECON INTEL</title>
+
 <style>
-    :root {
-        --bg: #050907;
-        --panel: #0a110e;
-        --panel-2: #0e1713;
-        --line: #1d3328;
-        --green: #55ff9a;
-        --green-dim: #28a968;
-        --amber: #ffd166;
-        --red: #ff6577;
-        --text: #d7e7dd;
-        --muted: #769084;
-        --white: #f1fff6;
-        --shadow: 0 0 24px rgba(55, 255, 140, .07);
-    }
+:root {
+    --bg: #050907;
+    --panel: #0a110e;
+    --panel2: #0d1712;
+    --line: #1c3528;
+    --green: #55ff9a;
+    --green2: #28b96d;
+    --text: #d7e7dd;
+    --muted: #71867b;
+    --white: #f1fff6;
+    --amber: #ffd166;
+    --red: #ff6577;
+}
 
-    * { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-    html, body {
-        margin: 0;
-        min-height: 100%;
-        background:
-            radial-gradient(circle at 50% -10%, rgba(52, 255, 137, .09), transparent 38%),
-            var(--bg);
-        color: var(--text);
-        font-family: "Courier New", Courier, monospace;
-    }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Courier New", monospace;
+}
 
-    body {
-        overflow-x: hidden;
-    }
+body {
+    overflow-x: hidden;
+}
 
-    .scanlines {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 20;
-        opacity: .045;
-        background: repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 3px,
-            #fff 4px
-        );
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: .035;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        #ffffff 4px
+    );
+}
+
+.wrap {
+    width: min(1180px, 100%);
+    margin: 0 auto;
+    padding: 12px;
+}
+
+header,
+.controls,
+.sort-panel {
+    border: 1px solid var(--line);
+    background: linear-gradient(
+        135deg,
+        rgba(10, 20, 15, .98),
+        rgba(5, 10, 8, .98)
+    );
+}
+
+header {
+    padding: 16px;
+    border-top: 2px solid var(--green);
+}
+
+.eyebrow {
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 9px;
+}
+
+.version {
+    display: inline-block;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 4px 8px;
+    font-size: 9px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--white);
+    font-size: clamp(25px, 5vw, 42px);
+    letter-spacing: 3px;
+    line-height: 1;
+    text-shadow: 0 0 15px rgba(85,255,154,.2);
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+.status-chip {
+    border: 1px solid var(--line);
+    background: #07100c;
+    padding: 7px 9px;
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.status-chip strong {
+    color: var(--green);
+}
+
+.controls,
+.sort-panel {
+    margin-top: 12px;
+    padding: 12px;
+}
+
+.control-label {
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 9px;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+}
+
+.filter {
+    min-height: 44px;
+    padding: 8px 5px;
+    border: 1px solid #254536;
+    background: #08130e;
+    color: #9eb6a8;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.filter.active,
+.filter:hover {
+    color: #00150a;
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.sort-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+}
+
+.sort {
+    min-height: 42px;
+    border: 1px solid #203b2c;
+    background: #08120d;
+    color: #a8bdb0;
+    padding: 7px 5px;
+    font-size: 9px;
+}
+
+.sort.active,
+.sort:hover {
+    color: var(--white);
+    border-color: var(--green2);
+    background: #0c1b13;
+}
+
+.sort .arrow {
+    color: var(--green);
+    margin-left: 3px;
+}
+
+.summary {
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: .5px;
+    margin: 12px 2px 8px;
+}
+
+#players {
+    display: grid;
+    gap: 8px;
+}
+
+.player {
+    border: 1px solid var(--line);
+    background: linear-gradient(
+        100deg,
+        var(--panel),
+        #08100c
+    );
+    display: grid;
+    grid-template-columns:
+        minmax(155px, 1.7fr)
+        repeat(8, minmax(55px, .7fr));
+    align-items: center;
+    gap: 0;
+}
+
+.identity {
+    min-width: 0;
+    padding: 11px;
+}
+
+.name {
+    color: var(--white);
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.club {
+    color: var(--muted);
+    font-size: 9px;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stat {
+    text-align: center;
+    min-width: 0;
+    padding: 10px 4px;
+    border-left: 1px solid var(--line);
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 8px;
+    margin-bottom: 4px;
+    letter-spacing: .5px;
+}
+
+.stat-value {
+    color: var(--text);
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.position {
+    color: var(--green);
+}
+
+.good {
+    color: var(--green);
+}
+
+.hot {
+    color: var(--amber);
+}
+
+.loading,
+.error,
+.empty {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 25px 14px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.error {
+    border-color: #4d222b;
+    color: #ff9aa8;
+}
+
+.spinner {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #244432;
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    vertical-align: -2px;
+    margin-right: 6px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
+}
+
+footer {
+    color: #40564a;
+    font-size: 8px;
+    line-height: 1.5;
+    padding: 14px 2px 25px;
+    text-align: center;
+}
+
+@media (max-width: 760px) {
 
     .wrap {
-        width: min(1180px, 100%);
-        margin: 0 auto;
-        padding: 14px;
+        padding: 8px;
     }
 
-    header {
-        border: 1px solid var(--line);
-        background: linear-gradient(135deg, rgba(12, 25, 19, .98), rgba(5, 10, 8, .98));
-        box-shadow: var(--shadow);
-        padding: 16px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    header::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--green);
-        box-shadow: 0 0 15px var(--green);
-    }
-
-    .eyebrow {
-        color: var(--green);
-        font-size: 11px;
-        letter-spacing: 2px;
-        margin-bottom: 7px;
-    }
-
-    h1 {
-        margin: 0;
-        color: var(--white);
-        font-size: clamp(24px, 6vw, 42px);
-        letter-spacing: 3px;
-        line-height: 1;
-        text-shadow: 0 0 14px rgba(85,255,154,.22);
-    }
-
-    .subtitle {
-        margin-top: 9px;
-        color: var(--muted);
-        font-size: 11px;
-        line-height: 1.5;
-    }
-
-    .status {
-        margin-top: 14px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        align-items: center;
-    }
-
-    .status-chip {
-        border: 1px solid var(--line);
-        background: #07100c;
-        padding: 7px 9px;
-        font-size: 10px;
-        color: var(--muted);
-    }
-
-    .status-chip strong { color: var(--green); }
-
-    .controls {
-        margin-top: 12px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 12px;
-    }
-
-    .control-label {
-        color: var(--green);
-        font-size: 10px;
-        letter-spacing: 1.5px;
-        margin-bottom: 9px;
+    header,
+    .controls,
+    .sort-panel {
+        padding: 10px;
     }
 
     .filter-buttons {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 7px;
+        grid-template-columns: repeat(3, 1fr);
     }
 
-    button {
-        font: inherit;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    .filter {
-        min-height: 44px;
-        border: 1px solid #254536;
-        background: #0a1510;
-        color: #9eb6a8;
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: .4px;
-        padding: 8px 4px;
-    }
-
-    .filter:hover,
-    .filter.active {
-        color: #00150a;
-        background: var(--green);
-        border-color: var(--green);
-        box-shadow: 0 0 13px rgba(85,255,154,.18);
-    }
-
-    .sort-panel {
-        margin-top: 12px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 12px;
+    .filter:first-child {
+        grid-column: span 3;
     }
 
     .sort-buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 7px;
-    }
-
-    .sort {
-        min-height: 42px;
-        border: 1px solid #203b2c;
-        background: #08120d;
-        color: #a8bdb0;
-        padding: 7px 5px;
-        font-size: 10px;
-        line-height: 1.15;
-    }
-
-    .sort:hover,
-    .sort.active {
-        color: var(--white);
-        border-color: var(--green-dim);
-        background: #0c1b13;
-    }
-
-    .sort .arrow {
-        color: var(--green);
-        margin-left: 3px;
-    }
-
-    .summary {
-        margin: 12px 0 8px;
-        color: var(--muted);
-        font-size: 10px;
-        letter-spacing: .5px;
-    }
-
-    #players {
-        display: grid;
-        gap: 8px;
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .player {
-        border: 1px solid var(--line);
-        background: linear-gradient(100deg, var(--panel), #08100c);
-        box-shadow: var(--shadow);
-        padding: 11px;
-        display: grid;
-        grid-template-columns: minmax(150px, 1.7fr) repeat(7, minmax(54px, .7fr));
-        gap: 8px;
-        align-items: center;
-    }
-
-    .player:hover {
-        border-color: #315943;
-        background: var(--panel-2);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .identity {
-        min-width: 0;
-    }
-
-    .name {
-        color: var(--white);
-        font-weight: bold;
-        font-size: 13px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .club {
-        color: var(--muted);
-        font-size: 9px;
-        margin-top: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        grid-column: 1 / -1;
+        padding: 10px;
+        border-bottom: 1px solid var(--line);
     }
 
     .stat {
-        text-align: center;
-        min-width: 0;
+        border-left: 0;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 8px 3px;
+    }
+
+    .stat:nth-child(5),
+    .stat:nth-child(9) {
+        border-right: 0;
+    }
+
+    .stat:nth-child(n+6) {
+        border-bottom: 0;
+    }
+
+    .name {
+        font-size: 12px;
+    }
+
+    .club {
+        font-size: 8px;
     }
 
     .stat-label {
-        display: none;
-        color: var(--muted);
-        font-size: 8px;
-        margin-bottom: 3px;
-        letter-spacing: .5px;
+        font-size: 7px;
     }
 
     .stat-value {
-        color: var(--text);
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .stat-value.good { color: var(--green); }
-    .stat-value.hot { color: var(--amber); }
-
-    .position {
-        color: var(--green);
         font-size: 10px;
     }
+}
 
-    .loading, .error, .empty {
-        border: 1px solid var(--line);
-        padding: 24px 14px;
-        text-align: center;
-        color: var(--muted);
-        background: var(--panel);
-        line-height: 1.6;
+@media (max-width: 470px) {
+
+    .filter-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filter:first-child {
+        grid-column: span 2;
+    }
+
+    .sort-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    h1 {
+        font-size: 25px;
+        letter-spacing: 2px;
+    }
+
+    .player {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .identity {
+        padding: 9px;
+    }
+
+    .name {
         font-size: 11px;
     }
 
-    .error {
-        border-color: #4d222b;
-        color: #ff9aa8;
+    .stat {
+        padding: 8px 2px;
     }
 
-    .spinner {
-        display: inline-block;
-        width: 11px;
-        height: 11px;
-        border: 2px solid #244432;
-        border-top-color: var(--green);
-        border-radius: 50%;
-        animation: spin .8s linear infinite;
-        vertical-align: -2px;
-        margin-right: 6px;
+    .stat-label {
+        font-size: 6px;
     }
 
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    footer {
-        color: #40564a;
+    .stat-value {
         font-size: 9px;
-        line-height: 1.5;
-        padding: 14px 2px 25px;
-        text-align: center;
     }
-
-    @media (max-width: 760px) {
-        .wrap { padding: 8px; }
-
-        header,
-        .controls,
-        .sort-panel {
-            padding: 10px;
-        }
-
-        .filter-buttons {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .filter-buttons .filter:first-child {
-            grid-column: span 3;
-        }
-
-        .sort-buttons {
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        /* VERSION 4 MOBILE LAYOUT
-           Every requested field is deliberately visible. */
-
-        .player {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .identity {
-            grid-column: 1 / -1;
-            padding: 11px 10px 9px;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .stat {
-            min-width: 0;
-            padding: 9px 4px;
-            border-right: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
-        }
-
-        .stat:nth-last-child(-n+4) {
-            border-bottom: 0;
-        }
-
-        .stat:nth-child(5),
-        .stat:nth-child(9) {
-            border-right: 0;
-        }
-
-        .stat-label {
-            display: block;
-            color: var(--muted);
-            font-size: 8px;
-            margin-bottom: 4px;
-            letter-spacing: .7px;
-        }
-
-        .stat-value {
-            font-size: 12px;
-        }
-
-        .name {
-            font-size: 13px;
-        }
-
-        .club {
-            font-size: 9px;
-        }
-    }
-
-    @media (max-width: 470px) {
-        h1 {
-            letter-spacing: 2px;
-        }
-
-        .filter-buttons {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .filter-buttons .filter:first-child {
-            grid-column: span 2;
-        }
-
-        .sort-buttons {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .player {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        .name {
-            font-size: 12px;
-        }
-
-        .club {
-            font-size: 8px;
-        }
-
-        .stat-label {
-            font-size: 7px;
-        }
-
-        .stat-value {
-            font-size: 11px;
-        }
-    }
+}
 </style>
 </head>
 
 <body>
-<div class="scanlines"></div>
 
 <main class="wrap">
 
-    <header>
+<header>
 
-        <div class="eyebrow">
-            CLASSIFIED // FANTASY PREMIER LEAGUE
-        </div>
-
-        <div style="
-            display:inline-block;
-            margin:0 0 9px;
-            padding:5px 9px;
-            border:1px solid #55ff9a;
-            color:#55ff9a;
-            background:#07100c;
-            font-size:10px;
-            letter-spacing:2px;
-            font-weight:bold;
-        ">
-            VERSION 4
-        </div>
-
-        <h1>FPL RECON INTEL</h1>
-
-        <div class="subtitle">
-            PLAYER INTELLIGENCE DATABASE // LIVE FPL FEED // SORT, FILTER &amp; IDENTIFY TARGETS
-        </div>
-
-        <div class="status">
-
-            <div class="status-chip">
-                FEED: <strong id="feedStatus">CONNECTING</strong>
-            </div>
-
-            <div class="status-chip">
-                LAST UPDATE: <strong id="updated">--</strong>
-            </div>
-
-            <div class="status-chip">
-                TARGETS: <strong id="count">--</strong>
-            </div>
-
-        </div>
-
-    </header>
-
-    <section class="controls">
-
-        <div class="control-label">
-            SELECT UNIT TYPE
-        </div>
-
-        <div class="filter-buttons">
-
-            <button class="filter active" data-position="all">
-                ALL PLAYERS
-            </button>
-
-            <button class="filter" data-position="1">
-                GK
-            </button>
-
-            <button class="filter" data-position="2">
-                DEFENDERS
-            </button>
-
-            <button class="filter" data-position="3">
-                MIDFIELDERS
-            </button>
-
-            <button class="filter" data-position="4">
-                ATTACKERS
-            </button>
-
-        </div>
-
-    </section>
-
-    <section class="sort-panel">
-
-        <div class="control-label">
-            SORT INTELLIGENCE BY
-        </div>
-
-        <div class="sort-buttons">
-
-            <button class="sort active" data-sort="web_name">
-                PLAYER <span class="arrow">▲</span>
-            </button>
-
-            <button class="sort" data-sort="team_name">
-                CLUB <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="position_name">
-                POSITION <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="price">
-                VALUE <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="total_points">
-                POINTS <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="goals_scored">
-                GOALS <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="clean_sheets">
-                CLEAN SHEETS <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="form_num">
-                FORM <span class="arrow"></span>
-            </button>
-
-            <button class="sort" data-sort="ict_index_num">
-                ICT <span class="arrow"></span>
-            </button>
-
-        </div>
-
-    </section>
-
-    <div class="summary" id="summary">
-        AWAITING INTELLIGENCE FEED...
+    <div class="eyebrow">
+        CLASSIFIED // FANTASY PREMIER LEAGUE
     </div>
 
-    <section id="players">
+    <div class="version">
+        VERSION 5
+    </div>
 
-        <div class="loading">
-            <span class="spinner"></span>
-            ESTABLISHING SECURE FPL DATA LINK...
+    <h1>FPL RECON INTEL</h1>
+
+    <div class="subtitle">
+        PLAYER INTELLIGENCE DATABASE // LIVE FPL FEED // SORT, FILTER &amp; IDENTIFY TARGETS
+    </div>
+
+    <div class="status">
+
+        <div class="status-chip">
+            FEED:
+            <strong id="feedStatus">CONNECTING</strong>
         </div>
 
-    </section>
+        <div class="status-chip">
+            LAST UPDATE:
+            <strong id="updated">--</strong>
+        </div>
 
-    <footer>
-        DATA SOURCE: OFFICIAL FANTASY PREMIER LEAGUE FEED<br>
-        This page reads the current FPL public data when opened or refreshed.
-    </footer>
+        <div class="status-chip">
+            TARGETS:
+            <strong id="count">--</strong>
+        </div>
+
+    </div>
+
+</header>
+
+<section class="controls">
+
+    <div class="control-label">
+        SELECT UNIT TYPE
+    </div>
+
+    <div class="filter-buttons">
+
+        <button class="filter active" data-position="all">
+            ALL PLAYERS
+        </button>
+
+        <button class="filter" data-position="1">
+            GK
+        </button>
+
+        <button class="filter" data-position="2">
+            DEFENDERS
+        </button>
+
+        <button class="filter" data-position="3">
+            MIDFIELDERS
+        </button>
+
+        <button class="filter" data-position="4">
+            ATTACKERS
+        </button>
+
+    </div>
+
+</section>
+
+<section class="sort-panel">
+
+    <div class="control-label">
+        SORT INTELLIGENCE BY
+    </div>
+
+    <div class="sort-buttons">
+
+        <button class="sort active" data-sort="web_name">
+            PLAYER <span class="arrow">▲</span>
+        </button>
+
+        <button class="sort" data-sort="team_name">
+            CLUB <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="position_name">
+            POSITION <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="price">
+            VALUE <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="total_points">
+            POINTS <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="goals_scored">
+            GOALS <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="clean_sheets">
+            CLEAN SHEETS <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="form_num">
+            FORM <span class="arrow"></span>
+        </button>
+
+        <button class="sort" data-sort="ict_index_num">
+            ICT <span class="arrow"></span>
+        </button>
+
+    </div>
+
+</section>
+
+<div class="summary" id="summary">
+    ESTABLISHING INTELLIGENCE LINK...
+</div>
+
+<section id="players">
+
+    <div class="loading">
+        <span class="spinner"></span>
+        ESTABLISHING SECURE FPL DATA LINK...
+    </div>
+
+</section>
+
+<footer>
+    DATA SOURCE: OFFICIAL FANTASY PREMIER LEAGUE FEED<br>
+    LIVE DATA REQUESTED WHEN PAGE IS OPENED OR REFRESHED
+</footer>
 
 </main>
 
 <script>
+
 "use strict";
 
-const API_URL = "./data.json";
+/*
+    CLOUDFLARE WORKER
+    Fetches fresh FPL data whenever this page loads.
+*/
+const API_URL =
+    "https://broad-disk-9811.jfbeech01.workers.dev/";
 
 let allPlayers = [];
 let teams = {};
@@ -605,6 +611,7 @@ const els = {
 };
 
 function esc(value) {
+
     return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -613,27 +620,37 @@ function esc(value) {
         .replace(/'/g, "&#039;");
 }
 
-function number(value) {
+function num(value) {
+
     const n = Number(value);
+
     return Number.isFinite(n) ? n : 0;
 }
 
-function preparePlayer(p) {
+function preparePlayer(player) {
 
-    const team = teams[p.team] || {};
-
-    const price = number(p.now_cost) / 10;
-    const form = number(p.form);
-    const ict = number(p.ict_index);
+    const team = teams[player.team] || {};
 
     return {
-        ...p,
-        team_name: team.name || "Unknown",
-        team_short: team.short_name || "UNK",
-        position_name: positionNames[p.element_type] || "—",
-        price,
-        form_num: form,
-        ict_index_num: ict
+        ...player,
+
+        team_name:
+            team.name || "Unknown",
+
+        team_short:
+            team.short_name || "UNK",
+
+        position_name:
+            positionNames[player.element_type] || "—",
+
+        price:
+            num(player.now_cost) / 10,
+
+        form_num:
+            num(player.form),
+
+        ict_index_num:
+            num(player.ict_index)
     };
 }
 
@@ -644,18 +661,30 @@ async function loadData() {
 
     try {
 
-        const response = await fetch(API_URL, {
-            method: "GET",
-            cache: "no-store"
-        });
+        const response = await fetch(
+            API_URL + "?t=" + Date.now(),
+            {
+                method: "GET",
+                cache: "no-store"
+            }
+        );
 
         if (!response.ok) {
+
             throw new Error(
-                "FPL feed returned HTTP " + response.status
+                "Worker returned HTTP " +
+                response.status
             );
         }
 
         const data = await response.json();
+
+        if (!data.elements || !data.teams) {
+
+            throw new Error(
+                "Worker returned unexpected FPL data."
+            );
+        }
 
         teams = {};
 
@@ -663,16 +692,22 @@ async function loadData() {
             teams[team.id] = team;
         });
 
-        allPlayers = data.elements.map(preparePlayer);
+        allPlayers =
+            data.elements.map(preparePlayer);
 
         els.feedStatus.textContent = "ONLINE";
-        els.feedStatus.style.color = "var(--green)";
+        els.feedStatus.style.color =
+            "var(--green)";
 
         els.updated.textContent =
-            new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit"
-            });
+            new Date().toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
 
         render();
 
@@ -681,7 +716,8 @@ async function loadData() {
         console.error(error);
 
         els.feedStatus.textContent = "OFFLINE";
-        els.feedStatus.style.color = "var(--red)";
+        els.feedStatus.style.color =
+            "var(--red)";
 
         els.players.innerHTML = `
             <div class="error">
@@ -690,19 +726,11 @@ async function loadData() {
 
                 <br><br>
 
-                The FPL data feed could not be reached.
-
-                <br>
-
-                Make sure the device is online and try
-                refreshing the page.
+                ${esc(error.message)}
 
                 <br><br>
 
-                If you opened this file directly from local
-                storage, your browser may be blocking requests
-                from local files. Running it through a simple
-                local web server will fix that.
+                Try refreshing the page.
 
             </div>
         `;
@@ -712,4 +740,305 @@ async function loadData() {
     }
 }
 
-function getFilteredPlayers
+function getFilteredPlayers() {
+
+    let players;
+
+    if (currentPosition === "all") {
+
+        players = [...allPlayers];
+
+    } else {
+
+        players =
+            allPlayers.filter(
+                player =>
+                    String(player.element_type) ===
+                    currentPosition
+            );
+    }
+
+    players.sort((a, b) => {
+
+        const av = a[sortKey];
+        const bv = b[sortKey];
+
+        if (
+            typeof av === "number" &&
+            typeof bv === "number"
+        ) {
+
+            return (
+                (av - bv) *
+                sortDirection
+            );
+        }
+
+        return String(av ?? "")
+            .localeCompare(
+                String(bv ?? ""),
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            ) * sortDirection;
+    });
+
+    return players;
+}
+
+function render() {
+
+    const players =
+        getFilteredPlayers();
+
+    els.count.textContent =
+        players.length;
+
+    const positionText =
+        currentPosition === "all"
+            ? "ALL UNITS"
+            : positionNames[currentPosition];
+
+    els.summary.textContent =
+        players.length +
+        " TARGET" +
+        (players.length === 1 ? "" : "S") +
+        " // " +
+        positionText +
+        " // SORT: " +
+        sortKey
+            .replace("_num", "")
+            .replaceAll("_", " ")
+            .toUpperCase();
+
+    if (!players.length) {
+
+        els.players.innerHTML =
+            `<div class="empty">
+                NO TARGETS FOUND.
+            </div>`;
+
+        return;
+    }
+
+    els.players.innerHTML =
+        players.map(player => {
+
+            const form =
+                player.form_num;
+
+            const ict =
+                player.ict_index_num;
+
+            const formClass =
+                form >= 5
+                    ? "good"
+                    : form >= 3
+                        ? "hot"
+                        : "";
+
+            const ictClass =
+                ict >= 100
+                    ? "good"
+                    : ict >= 50
+                        ? "hot"
+                        : "";
+
+            return `
+
+                <article class="player">
+
+                    <div class="identity">
+
+                        <div class="name">
+                            ${esc(player.web_name)}
+                        </div>
+
+                        <div class="club">
+                            ${esc(player.team_name)}
+                            //
+                            ${esc(player.team_short)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            POSITION
+                        </div>
+
+                        <div class="stat-value position">
+                            ${esc(player.position_name)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            VALUE
+                        </div>
+
+                        <div class="stat-value">
+                            £${player.price.toFixed(1)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            POINTS
+                        </div>
+
+                        <div class="stat-value">
+                            ${num(player.total_points)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            GOALS
+                        </div>
+
+                        <div class="stat-value">
+                            ${num(player.goals_scored)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            CLEAN SHEETS
+                        </div>
+
+                        <div class="stat-value">
+                            ${num(player.clean_sheets)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            FORM
+                        </div>
+
+                        <div class="stat-value ${formClass}">
+                            ${form.toFixed(1)}
+                        </div>
+
+                    </div>
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            ICT
+                        </div>
+
+                        <div class="stat-value ${ictClass}">
+                            ${ict.toFixed(1)}
+                        </div>
+
+                    </div>
+
+                </article>
+            `;
+
+        }).join("");
+}
+
+document
+    .querySelectorAll(".filter")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(".filter")
+                    .forEach(
+                        item =>
+                            item.classList
+                                .remove("active")
+                    );
+
+                button.classList.add("active");
+
+                currentPosition =
+                    button.dataset.position;
+
+                render();
+            }
+        );
+    });
+
+document
+    .querySelectorAll(".sort")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const newKey =
+                    button.dataset.sort;
+
+                if (sortKey === newKey) {
+
+                    sortDirection *= -1;
+
+                } else {
+
+                    sortKey = newKey;
+                    sortDirection = 1;
+                }
+
+                document
+                    .querySelectorAll(".sort")
+                    .forEach(item => {
+
+                        item.classList
+                            .remove("active");
+
+                        const arrow =
+                            item.querySelector(
+                                ".arrow"
+                            );
+
+                        if (arrow) {
+                            arrow.textContent = "";
+                        }
+                    });
+
+                button.classList.add("active");
+
+                const arrow =
+                    button.querySelector(".arrow");
+
+                if (arrow) {
+
+                    arrow.textContent =
+                        sortDirection === 1
+                            ? "▲"
+                            : "▼";
+                }
+
+                render();
+            }
+        );
+    });
+
+loadData();
+
+</script>
+
+</body>
+</html>
